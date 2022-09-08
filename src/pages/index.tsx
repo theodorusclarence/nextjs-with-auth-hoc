@@ -3,7 +3,6 @@ import { HiOutlineCheckCircle, HiOutlineXCircle } from 'react-icons/hi';
 
 import Button from '@/components/buttons/Button';
 import withAuth from '@/components/hoc/withAuth';
-import Layout from '@/components/layout/Layout';
 import ArrowLink from '@/components/links/ArrowLink';
 import ButtonLink from '@/components/links/ButtonLink';
 import UnderlineLink from '@/components/links/UnderlineLink';
@@ -26,7 +25,7 @@ function HomePage() {
   const logout = useAuthStore.useLogout();
 
   return (
-    <Layout>
+    <>
       {/* <Seo templateTitle='Home' /> */}
       <Seo />
 
@@ -39,14 +38,14 @@ function HomePage() {
               Authentication pattern example using Higher Order Component,
               Zustand, and React Query
             </p>
-            <p className='mt-2 text-sm text-gray-700'>
+            <div className='mt-2 text-sm text-gray-700'>
               <ArrowLink href='https://github.com/theodorusclarence/nextjs-with-auth-hoc'>
                 See the repository
               </ArrowLink>
-            </p>
+            </div>
 
             <div className='mt-6 rounded border border-slate-200 bg-slate-50 py-3 px-4'>
-              <p className='inline-flex items-center gap-2 text-sm font-medium text-gray-700'>
+              <div className='inline-flex items-center gap-2 text-sm font-medium text-gray-700'>
                 isAuthenticated:{' '}
                 <span className='text-lg'>
                   {isAuthenticated ? (
@@ -61,7 +60,7 @@ function HomePage() {
                     </>
                   )}
                 </span>
-              </p>
+              </div>
               <div className='mt-2'>
                 {isAuthenticated ? (
                   <Button variant='light' onClick={logout}>
@@ -97,6 +96,6 @@ function HomePage() {
           </div>
         </section>
       </main>
-    </Layout>
+    </>
   );
 }
