@@ -1,0 +1,56 @@
+import { useRouter } from 'next/router';
+import * as React from 'react';
+import { useQuery } from 'react-query';
+
+import { mockQuery } from '@/lib/axios-mock';
+import useRQWithToast from '@/hooks/toast/useRQWithToast';
+
+import Button from '@/components/buttons/Button';
+import Layout from '@/components/layout/Layout';
+import Seo from '@/components/Seo';
+
+import { ApiReturn, User } from '@/types/api';
+
+export default function AuthPage() {
+  const router = useRouter();
+  const { data: data } = useRQWithToast(
+    useQuery<ApiReturn<User>, Error>('/me', mockQuery)
+  );
+
+  return (
+    <Layout>
+      <Seo templateTitle='Auth' />
+
+      <main>
+        <section className=''>
+          <div className='layout min-h-screen py-20'>
+            <div className='space-x-2'>
+              <Button
+                variant='light'
+                onClick={() => {
+                  localStorage.setItem('token', 'dummy-token');
+                  router.reload();
+                }}
+              >
+                Set Token
+              </Button>
+              <Button
+                variant='light'
+                onClick={() => {
+                  localStorage.removeItem('token');
+                  router.reload();
+                }}
+              >
+                Remove Token
+              </Button>
+            </div>
+            <p className='mt-2 text-sm font-medium'></p>
+            <pre className='mt-4 overflow-auto text-sm'>
+              {JSON.stringify(data ?? {}, null, 2)}
+            </pre>
+          </div>
+        </section>
+      </main>
+    </Layout>
+  );
+}
