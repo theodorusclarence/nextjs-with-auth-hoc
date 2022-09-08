@@ -15,7 +15,7 @@ export default function useRQWithToast<T, E>(
   query: UseQueryResult<T, E>,
   { runCondition = true, ...customMessages }: OptionType = {}
 ) {
-  const { data, isError, isLoading } = query;
+  const { data, isError, error, isLoading } = query;
 
   const toastStatus = React.useRef<string>(data ? 'done' : 'idle');
   const toastMessage = {
@@ -30,7 +30,11 @@ export default function useRQWithToast<T, E>(
     if (toastStatus.current === 'done' && !isLoading) return;
 
     if (isError) {
-      toast.error(toastMessage.error, { id: toastStatus.current });
+      if (typeof toastMessage.error === 'string') {
+        toast.error(toastMessage.error, { id: toastStatus.current });
+      } else {
+        toast.error(toastMessage.error(error), { id: toastStatus.current });
+      }
       toastStatus.current = 'done';
     } else if (isLoading) {
       toastStatus.current = toast.loading(toastMessage.loading);
@@ -42,8 +46,10 @@ export default function useRQWithToast<T, E>(
     return () => {
       toast.dismiss(toastStatus.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     data,
+    error,
     isError,
     isLoading,
     runCondition,
