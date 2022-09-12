@@ -5,15 +5,17 @@ import clsxm from '@/lib/clsxm';
 import UnderlineLink from '@/components/links/UnderlineLink';
 import { UnstyledLinkProps } from '@/components/links/UnstyledLink';
 
-type ArrowLinkProps<C extends React.ElementType> = {
+export type ArrowLinkProps<C extends React.ElementType> = {
   as?: C;
   direction?: 'left' | 'right';
+  spanClassName?: string;
 } & UnstyledLinkProps &
   React.ComponentProps<C>;
 
 export default function ArrowLink<C extends React.ElementType>({
   children,
   className,
+  spanClassName,
   direction = 'right',
   as,
   ...rest
@@ -29,7 +31,7 @@ export default function ArrowLink<C extends React.ElementType>({
         className
       )}
     >
-      <span>{children}</span>
+      <span className={spanClassName}>{children}</span>
       <svg
         viewBox='0 0 16 16'
         height='1em'
