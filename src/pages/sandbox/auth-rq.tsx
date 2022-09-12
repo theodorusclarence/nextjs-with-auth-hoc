@@ -9,7 +9,8 @@ import Button from '@/components/buttons/Button';
 import Layout from '@/components/layout/Layout';
 import Seo from '@/components/Seo';
 
-import { ApiReturn, User } from '@/types/api';
+import { ApiReturn } from '@/types/api';
+import { User } from '@/types/auth';
 
 export default function AuthPage() {
   const router = useRouter();

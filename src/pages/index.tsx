@@ -1,10 +1,15 @@
 import * as React from 'react';
+import { HiOutlineCheckCircle, HiOutlineXCircle } from 'react-icons/hi';
 
+import Button from '@/components/buttons/Button';
+import withAuth from '@/components/hoc/withAuth';
 import Layout from '@/components/layout/Layout';
 import ArrowLink from '@/components/links/ArrowLink';
 import ButtonLink from '@/components/links/ButtonLink';
 import UnderlineLink from '@/components/links/UnderlineLink';
 import Seo from '@/components/Seo';
+
+import useAuthStore from '@/store/useAuthStore';
 
 /**
  * SVGR Support
@@ -15,7 +20,11 @@ import Seo from '@/components/Seo';
  */
 import Vercel from '~/svg/Vercel.svg';
 
-export default function HomePage() {
+export default withAuth(HomePage, 'optional');
+function HomePage() {
+  const isAuthenticated = useAuthStore.useIsAuthenticated();
+  const logout = useAuthStore.useLogout();
+
   return (
     <Layout>
       {/* <Seo templateTitle='Home' /> */}
@@ -36,9 +45,44 @@ export default function HomePage() {
               </ArrowLink>
             </p>
 
-            <ButtonLink className='mt-6' href='/' variant='light'>
-              Sign In
-            </ButtonLink>
+            <div className='mt-6 rounded border border-slate-200 bg-slate-50 py-3 px-4'>
+              <p className='inline-flex items-center gap-2 text-sm font-medium text-gray-700'>
+                isAuthenticated:{' '}
+                <span className='text-lg'>
+                  {isAuthenticated ? (
+                    <>
+                      <HiOutlineCheckCircle className='text-green-600' />
+                      <p className='sr-only'>true</p>
+                    </>
+                  ) : (
+                    <>
+                      <HiOutlineXCircle className='text-red-600' />
+                      <p className='sr-only'>false</p>
+                    </>
+                  )}
+                </span>
+              </p>
+              <div className='mt-2'>
+                {isAuthenticated ? (
+                  <Button variant='light' onClick={logout}>
+                    Logout
+                  </Button>
+                ) : (
+                  <ButtonLink href='/login' variant='light'>
+                    Login
+                  </ButtonLink>
+                )}
+              </div>
+            </div>
+
+            <div className='mt-6 flex flex-wrap gap-2'>
+              <ButtonLink href='/protected' variant='light'>
+                Protected
+              </ButtonLink>
+              <ButtonLink href='/optional' variant='light'>
+                Optional
+              </ButtonLink>
+            </div>
 
             <footer className='absolute bottom-2 text-gray-700'>
               © {new Date().getFullYear()} By{' '}
