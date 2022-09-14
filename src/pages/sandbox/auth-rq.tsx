@@ -1,6 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { useQuery } from 'react-query';
 
 import { mockQuery } from '@/lib/axios-mock';
 import useRQWithToast from '@/hooks/toast/useRQWithToast';
@@ -15,7 +15,7 @@ import { User } from '@/types/auth';
 export default function AuthPage() {
   const router = useRouter();
   const { data: data } = useRQWithToast(
-    useQuery<ApiReturn<User>, Error>('/me', mockQuery)
+    useQuery<ApiReturn<User>, Error>(['/me'], mockQuery)
   );
 
   return (

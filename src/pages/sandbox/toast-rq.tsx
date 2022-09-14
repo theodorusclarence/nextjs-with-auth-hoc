@@ -1,6 +1,6 @@
+import { useQuery } from '@tanstack/react-query';
 import * as React from 'react';
 import toast from 'react-hot-toast';
-import { useQuery } from 'react-query';
 
 import api from '@/lib/axios';
 import useLoadingToast from '@/hooks/toast/useLoadingToast';
@@ -26,7 +26,7 @@ export default function SandboxPage() {
   const isLoading = useLoadingToast();
 
   const { data: queryData } = useRQWithToast(
-    useQuery<DataType, Error>('/statistics', queryFn)
+    useQuery<DataType, Error>(['/statistics'], queryFn)
   );
 
   return (

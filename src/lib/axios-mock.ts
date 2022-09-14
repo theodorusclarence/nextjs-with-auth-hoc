@@ -1,5 +1,5 @@
+import { QueryFunction } from '@tanstack/react-query';
 import axios from 'axios';
-import { QueryFunction } from 'react-query';
 
 /** Add NEXT_PUBLIC_MOCK_DEPLOYMENT_URL to your production deployment on vercel! */
 const baseURL = process.env.NEXT_PUBLIC_MOCK_DEPLOYMENT_URL
