@@ -1,4 +1,5 @@
 import * as React from 'react';
+import toast from 'react-hot-toast';
 import { HiOutlineCheckCircle, HiOutlineXCircle } from 'react-icons/hi';
 
 import Button from '@/components/buttons/Button';
@@ -75,6 +76,37 @@ function HomePage() {
             </div>
 
             <div className='mt-6 flex flex-wrap gap-2'>
+              {isAuthenticated ? (
+                <Button
+                  variant='light'
+                  onClick={() => {
+                    toast((t) => (
+                      <div>
+                        <p>
+                          The auth page can only be accessed when the user is{' '}
+                          <strong className='text-red-400'>logged out</strong>.
+                        </p>
+                        <Button
+                          className='mt-2 text-sm'
+                          variant='light'
+                          onClick={() => {
+                            toast.dismiss(t.id);
+                            logout();
+                          }}
+                        >
+                          Logout
+                        </Button>
+                      </div>
+                    ));
+                  }}
+                >
+                  Auth
+                </Button>
+              ) : (
+                <ButtonLink href='/auth' variant='light'>
+                  Auth
+                </ButtonLink>
+              )}
               <ButtonLink href='/protected' variant='light'>
                 Protected
               </ButtonLink>

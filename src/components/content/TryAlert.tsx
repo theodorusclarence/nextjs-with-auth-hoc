@@ -15,7 +15,7 @@ export default function TryAlert({
   return (
     <div
       className={clsxm(
-        'not-prose w-max rounded border border-slate-200 bg-slate-100 py-3 px-5 text-sm shadow-sm',
+        'not-prose w-max max-w-full rounded border border-slate-200 bg-slate-100 py-3 px-5 text-sm shadow-sm',
         className
       )}
       {...rest}
