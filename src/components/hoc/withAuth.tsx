@@ -3,6 +3,7 @@ import * as React from 'react';
 import { ImSpinner8 } from 'react-icons/im';
 
 import apiMock from '@/lib/axios-mock';
+import { getFromLocalStorage } from '@/lib/helper';
 
 import useAuthStore from '@/store/useAuthStore';
 
@@ -13,6 +14,7 @@ export interface WithAuthProps {
   user: User;
 }
 
+const HOME_ROUTE = '/';
 const LOGIN_ROUTE = '/login';
 
 enum RouteRole {
@@ -51,19 +53,20 @@ export default function withAuth<T extends WithAuthProps = WithAuthProps>(
     const isAuthenticated = useAuthStore.useIsAuthenticated();
     const isLoading = useAuthStore.useIsLoading();
     const login = useAuthStore.useLogin();
+    const logout = useAuthStore.useLogout();
     const stopLoading = useAuthStore.useStopLoading();
     const user = useAuthStore.useUser();
     //#endregion  //*======== STORE ===========
 
-    React.useEffect(() => {
+    const checkAuth = React.useCallback(() => {
+      const token = getFromLocalStorage('token');
+      if (!token) {
+        isAuthenticated && logout();
+        stopLoading();
+        return;
+      }
       const loadUser = async () => {
         try {
-          const token = localStorage.getItem('token');
-
-          if (!token) {
-            return;
-          }
-
           const res = await apiMock.get<ApiReturn<User>>('/me');
 
           login({
@@ -80,7 +83,18 @@ export default function withAuth<T extends WithAuthProps = WithAuthProps>(
       if (!isAuthenticated) {
         loadUser();
       }
-    }, [isAuthenticated, login, stopLoading]);
+    }, [isAuthenticated, login, logout, stopLoading]);
+
+    React.useEffect(() => {
+      // run checkAuth every page visit
+      checkAuth();
+
+      // run checkAuth every focus changes
+      window.addEventListener('focus', checkAuth);
+      return () => {
+        window.removeEventListener('focus', checkAuth);
+      };
+    }, [checkAuth]);
 
     React.useEffect(() => {
       if (!isLoading) {
@@ -90,7 +104,7 @@ export default function withAuth<T extends WithAuthProps = WithAuthProps>(
             if (query?.redirect) {
               router.replace(query.redirect as string);
             } else {
-              router.replace('/');
+              router.replace(HOME_ROUTE);
             }
           }
         } else {
